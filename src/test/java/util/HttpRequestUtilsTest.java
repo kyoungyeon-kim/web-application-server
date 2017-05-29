@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import model.User;
 import util.HttpRequestUtils.Pair;
 
 public class HttpRequestUtilsTest {
@@ -69,5 +70,26 @@ public class HttpRequestUtilsTest {
         String header = "Content-Length: 59";
         Pair pair = HttpRequestUtils.parseHeader(header);
         assertThat(pair, is(new Pair("Content-Length", "59")));
+    }
+    
+    @Test
+    public void parseUrl() {
+    	String requestURI = "GET /user/create?userId=asdfsdfsd&password=asdfsdf&name=a&email=asdf%40aa.com HTTP/1.1";
+    	String[] tokens = requestURI.split(" ");
+    	String[] queryStringTokens = tokens[1].split("\\?");
+    	
+    	Map<String, String> parseMap = HttpRequestUtils.parseQueryString(queryStringTokens[1]);
+    	
+    	String userId = parseMap.get("userId");
+    	String password = parseMap.get("password");
+    	String name = parseMap.get("name");
+    	String email = parseMap.get("email");
+
+    	User user = new User(userId, password, name, email);
+    	
+    	System.out.println(user);
+    	
+    	System.out.println("/user/create?".startsWith("/user/create?userId=asdfsdfsd&password=&name=aaaa&email=asdf%40aa.com"));
+    	System.out.println("/user/create?userId=asdfsdfsd&password=&name=aaaa&email=asdf%40aa.com".startsWith("/user/create"));
     }
 }
