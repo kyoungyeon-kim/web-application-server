@@ -10,17 +10,15 @@ public class LoginContoller extends AbstractController {
 	public void doPost(HttpRequest httpRequest, HttpResponse httpResponse) {
 		String loginUserId = httpRequest.getParameter("userId");
 		String loginPassword = httpRequest.getParameter("password");
-		String loginCookie = "login=true;";
 		String redirectPage = "/index.html";
 		
 		User user = DataBase.findUserById(loginUserId);
 
 		if (user == null || !user.getPassword().equals(loginPassword)) {
-			loginCookie = "login=false;";
 			redirectPage = "/user/login_failed.html";
 		}
 
-		httpResponse.addHeader("Set-Cookie", loginCookie);
+		httpRequest.getSession().setAttribute("user", user);
 		httpResponse.sendRedirect(redirectPage);
 	}
 }

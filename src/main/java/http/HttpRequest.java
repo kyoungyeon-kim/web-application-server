@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import model.HttpConstant;
 import model.RequestMethod;
+import util.HttpCookie;
 import util.HttpRequestUtils;
 import util.IOUtils;
 
@@ -134,5 +135,13 @@ public class HttpRequest {
 
 	public void setParameter(Map<String, String> parameter) {
 		this.parameter = parameter;
+	}
+
+	public HttpCookie getCookies() {
+		return new HttpCookie(getHeader("Cookie"));
+	}
+	
+	public HttpSession getSession() {
+		return HttpSessions.getSesson(getCookies().getCookie("JSESSIONID"));
 	}
 }
